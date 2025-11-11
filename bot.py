@@ -161,7 +161,7 @@ async def start_suggestion_flow(update: Update, context: ContextTypes.DEFAULT_TY
         "3. Выгода/эффект: экономия времени/денег, повышение безопасности, качество, удобство\n"
         "4. Примерный план внедрения: простые шаги, ресурсы\n"
         "5. Вложения: фото, схемы, расчёты\n\n"
-        "Чтобы отменить нажмите /ОТМЕНА.",
+        "Чтобы отменить нажмите /cancel.",
         reply_markup=ReplyKeyboardRemove()
     )
     return SUGGESTION
@@ -171,7 +171,7 @@ async def handle_new_suggestion(update: Update, context: ContextTypes.DEFAULT_TY
     text = update.message.text.strip()
 
     if not text:
-        await update.message.reply_text("Пустое предложение не может быть сохранено. Пожалуйста, введите текст или нажмите /ОТМЕНА.")
+        await update.message.reply_text("Пустое предложение не может быть сохранено. Пожалуйста, введите текст или нажмите /cancel.")
         return SUGGESTION
 
     context.user_data["suggestion_text"] = text
@@ -181,7 +181,7 @@ async def handle_new_suggestion(update: Update, context: ContextTypes.DEFAULT_TY
         "Теперь вы можете отправить 1 или несколько фото (по одному). "
         "После загрузки всех нужных — нажмите /done. "
         "Если фото не нужны, также нажмите /done. "
-        "Для отмены — нажмите /ОТМЕНА."
+        "Для отмены — нажмите /cancel."
     )
     return PHOTO_UPLOAD
 
@@ -376,7 +376,7 @@ async def handle_view_suggestion_callbacks(update: Update, context: ContextTypes
         context.user_data["comment_for"] = suggestion_id
         await query.edit_message_text(
             f"Пожалуйста, отправьте комментарий к предложению №{suggestion_id}.\n"
-            "Для отмены нажмите /ОТМЕНА, для завершения ввода комментария нажмите /done."
+            "Для отмены нажмите /cancel, для завершения ввода комментария нажмите /done."
         )
         return COMMENT_INPUT
 
@@ -445,7 +445,7 @@ async def comment_text_handler(update: Update, context: ContextTypes.DEFAULT_TYP
             context.user_data.pop("chat_suggestion_id", None)
             await send_detailed_suggestion_message(update.message, context, suggestion_id)
             return VIEW_SUGGESTION
-        elif comment_text.startswith('ОТМЕНА'):
+        elif comment_text.startswith('/cancel'):
             await update.message.reply_text("Чат отменён.")
             context.user_data.pop("chat_suggestion_id", None)
             await send_detailed_suggestion_message(update.message, context, suggestion_id)
@@ -491,7 +491,7 @@ async def comment_text_handler(update: Update, context: ContextTypes.DEFAULT_TYP
             context.user_data.pop("comment_for", None)
             await send_detailed_suggestion_message(update.message, context, suggestion_id)
             return VIEW_SUGGESTION
-        elif comment_text.startswith('ОТМЕНА'):
+        elif comment_text.startswith('/cancel'):
             await update.message.reply_text("Ввод комментария отменён.")
             context.user_data.pop("comment_for", None)
             await send_detailed_suggestion_message(update.message, context, suggestion_id)
@@ -521,7 +521,7 @@ async def comment_text_handler(update: Update, context: ContextTypes.DEFAULT_TYP
 
             await update.message.reply_text(
                 "Комментарий добавлен. Если хотите добавить ещё, напишите текст, "
-                "Для завершения нажмите /done,а для отмены нажмите /ОТМЕНА."
+                "Для завершения нажмите /done,а для отмены нажмите /cancel."
             )
             return COMMENT_INPUT
     else:
