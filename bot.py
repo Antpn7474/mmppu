@@ -179,9 +179,9 @@ async def handle_new_suggestion(update: Update, context: ContextTypes.DEFAULT_TY
 
     await update.message.reply_text(
         "Теперь вы можете отправить 1 или несколько фото (по одному). "
-        "После загрузки всех нужных — напишите /done. "
-        "Если фото не нужны, также напишите /done. "
-        "Для отмены — /cancel."
+        "После загрузки всех нужных — нажмите /done. "
+        "Если фото не нужны, также нажмите /done. "
+        "Для отмены — нажмите /cancel."
     )
     return PHOTO_UPLOAD
 
@@ -190,7 +190,7 @@ async def handle_photo_upload(update: Update, context: ContextTypes.DEFAULT_TYPE
         photo = update.message.photo[-1]
         file_id = photo.file_id
         context.user_data.setdefault("suggestion_photos", []).append(file_id)
-        await update.message.reply_text("Фото добавлено. Если есть ещё — пришлите ещё. После окончания напишите /done.")
+        await update.message.reply_text("Фото добавлено. Если есть ещё — пришлите ещё. После окончания нажмите /done.")
         return PHOTO_UPLOAD
     else:
         await update.message.reply_text("Пожалуйста, отправьте фото или завершите ввод командой /done.")
@@ -394,7 +394,7 @@ async def handle_view_suggestion_callbacks(update: Update, context: ContextTypes
             else:
                 msg_text = f"Чат по предложению №{suggestion_id} пуст.\n\n"
             
-            msg_text += "Отправьте сообщение пользователю или /done для выхода."
+            msg_text += "Отправьте сообщение пользователю или нажмите /done для выхода."
             
             await query.edit_message_text(msg_text)
             return COMMENT_INPUT
@@ -478,7 +478,7 @@ async def comment_text_handler(update: Update, context: ContextTypes.DEFAULT_TYP
                 print(f"Ошибка при уведомлении пользователя: {e}")
 
             await update.message.reply_text(
-                "Сообщение отправлено. Напишите ещё или /done для выхода."
+                "Сообщение отправлено. Напишите ещё или нажмите /done для выхода."
             )
             return COMMENT_INPUT
     
@@ -521,7 +521,7 @@ async def comment_text_handler(update: Update, context: ContextTypes.DEFAULT_TYP
 
             await update.message.reply_text(
                 "Комментарий добавлен. Если хотите добавить ещё, напишите текст, "
-                "или нажмите /done для завершения, /cancel для отмены."
+                "Для завершения нажмите /done,а для отмены нажмите /cancel."
             )
             return COMMENT_INPUT
     else:
